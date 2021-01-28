@@ -1,0 +1,58 @@
+---
+title: "Choice Based Conjoint Analysis"
+author: "Barbara Innamorato & Isabella Dario"
+date: "1/27/2021"
+output: html_document
+---
+```{r libraries}
+library(dplyr)
+library(stringr)
+
+```
+
+```{r loading the csv}
+game1 <- read.csv("Videogame_Survey.csv")
+
+# cancello la colonna sulle info cronologiche e una colonna in più (beatrice stava rispondendo mentre io modificavo)
+game <- game1[-c(1,2,12)] # per l'analisi tolgo anche sex
+lapply(lapply(game, is.na), which) # check for missing values 
+
+# rename columns 
+colnames(game) <- c("Q1", "Q2","Q3","Q4","Q5", "Q6","Q7","Q8","Q9")
+head(game)
+str(game)
+
+```
+We see that data are in WIDE FORMAT, so it is useful to reshape it in the LONG FORMAT after some adjustment in the dataset.
+
+```{r formatting csv}
+n_row <- nrow(game)
+for (row in 1:n_row) {
+  game[row,] <- str_replace(game[row,], "Profile", "")
+}
+
+# devo aggiungere una colonna resp.id con index
+game$resp.id <- rownames(game)
+```
+
+```{r reshape in long format}
+game <- reshape(game, varying = list(1:9), direction = "long", idvar = "resp.id")
+colnames(game) <- c("resp.id", "question", "choice")
+```
+
+Now that we have our data in long format, we can start the analysis.
+
+# The Multinomial Logit and Mixed Multinomial Logit models
+
+
+
+
+
+
+
+
+
+
+
+
+
